@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C++ Coding Challenges</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #ecf0f1;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .challenge-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #3498db;
+        }
+
+        .challenge-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .challenge-title {
+            font-size: 1.5em;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .difficulty {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        .intermediate { background: #f39c12; color: white; }
+        .hard { background: #e74c3c; color: white; }
+        .expert { background: #8e44ad; color: white; }
+
+        .problem-statement {
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: #34495e;
+        }
+
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .btn-success {
+            background: #2ecc71;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .hint, .solution {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .hint {
+            border-left: 4px solid #f39c12;
+        }
+
+        .solution {
+            border-left: 4px solid #2ecc71;
+        }
+
+        .test-cases {
+            background: #e8f4f8;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #3498db;
+        }
+
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+
+        .next-challenge {
+            text-align: center;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 C++ Coding Challenges</h1>
+            <p>Progressive difficulty • Intermediate to Expert</p>
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number" id="solved-count">0</div>
+                <div class="stat-label">Solved</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="total-count">6</div>
+                <div class="stat-label">Total</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="hints-used">0</div>
+                <div class="stat-label">Hints Used</div>
+            </div>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress"></div>
+        </div>
+
+        <div id="challenges-container">
+            <!-- Challenges will be inserted here -->
+        </div>
+
+        <div class="next-challenge">
+            <button class="btn btn-primary" onclick="showNextChallenge()">Start First Challenge</button>
+        </div>
+    </div>
+
+    <script>
+        const challenges = [
+            {
+                id: 1,
+                title: "Binary Tree Level Order Traversal",
+                difficulty: "intermediate",
+                problem: `Given the root of a binary tree, return the level order traversal of its nodes' values (i.e., from left to right, level by level).
+
+For example, given the binary tree [3,9,20,null,null,15,7]:
+- Level 0: [3]
+- Level 1: [9, 20]
+- Level 2: [15, 7]
+
+Return: [[3], [9, 20], [15, 7]]`,
+                testCases: `Input: root = [3,9,20,null,null,15,7]
+Output: [[3],[9,20],[15,7]]
+
+Input: root = [1]
+Output: [[1]]
+
+Input: root = []
+Output: []`,
+                hint: "Use a queue (BFS) to traverse level by level. Keep track of the current level size to group nodes properly.",
+                solution: `vector<vector<int>> levelOrder(TreeNode* root) {
+    if (!root) return {};
+    
+    vector<vector<int>> result;
+    queue<TreeNode*> q;
+    q.push(root);
+    
+    while (!q.empty()) {
+        int levelSize = q.size();
+        vector<int> currentLevel;
+        
+        for (int i = 0; i < levelSize; i++) {
+            TreeNode* node = q.front();
+            q.pop();
+            currentLevel.push_back(node->val);
+            
+            if (node->left) q.push(node->left);
+            if (node->right) q.push(node->right);
+        }
+        
+        result.push_back(currentLevel);
+    }
+    
+    return result;
+}`
+            },
+            {
+                id: 2,
+                title: "Longest Substring Without Repeating Characters",
+                difficulty: "intermediate",
+                problem: `Given a string s, find the length of the longest substring without repeating characters.
+
+Examples:
+- "abcabcbb" → 3 (substring "abc")
+- "bbbbb" → 1 (substring "b")
+- "pwwkew" → 3 (substring "wke")
+
+Constraints: 0 ≤ s.length ≤ 5×10⁴`,
+                testCases: `Input: s = "abcabcbb"
+Output: 3
+
+Input: s = "bbbbb"
+Output: 1
+
+Input: s = "pwwkew"
+Output: 3
+
+Input: s = ""
+Output: 0`,
+                hint: "Use sliding window technique with two pointers. Keep track of character positions using a hash map.",
+                solution: `int lengthOfLongestSubstring(string s) {
+    unordered_map<char, int> charIndex;
+    int maxLength = 0;
+    int left = 0;
+    
+    for (int right = 0; right < s.length(); right++) {
+        if (charIndex.find(s[right]) != charIndex.end() && 
+            charIndex[s[right]] >= left) {
+            left = charIndex[s[right]] + 1;
+        }
+        
+        charIndex[s[right]] = right;
+        maxLength = max(maxLength, right - left + 1);
+    }
+    
+    return maxLength;
+}`
+            },
+            {
+                id: 3,
+                title: "Merge k Sorted Lists",
+                difficulty: "hard",
+                problem: `You are given an array of k linked-lists, each sorted in ascending order. Merge all the linked-lists into one sorted linked-list and return it.
+
+Example:
+Input: lists = [[1,4,5],[1,3,4],[2,6]]
+Output: [1,1,2,3,4,4,5,6]
+
+Can you solve it with O(n log k) time complexity where n is total number of nodes?`,
+                testCases: `Input: lists = [[1,4,5],[1,3,4],[2,6]]
+Output: [1,1,2,3,4,4,5,6]
+
+Input: lists = []
+Output: []
+
+Input: lists = [[]]
+Output: []`,
+                hint: "Use a min-heap (priority queue) to always get the smallest element from all lists. Alternatively, use divide and conquer approach.",
+                solution: `ListNode* mergeKLists(vector<ListNode*>& lists) {
+    auto compare = [](ListNode* a, ListNode* b) {
+        return a->val > b->val;
+    };
+    
+    priority_queue<ListNode*, vector<ListNode*>, decltype(compare)> pq(compare);
+    
+    // Add first node of each list to priority queue
+    for (ListNode* list : lists) {
+        if (list) pq.push(list);
+    }
+    
+    ListNode dummy(0);
+    ListNode* current = &dummy;
+    
+    while (!pq.empty()) {
+        ListNode* smallest = pq.top();
+        pq.pop();
+        
+        current->next = smallest;
+        current = current->next;
+        
+        if (smallest->next) {
+            pq.push(smallest->next);
+        }
+    }
+    
+    return dummy.next;
+}`
+            },
+            {
+                id: 4,
+                title: "Serialize and Deserialize Binary Tree",
+                difficulty: "hard",
+                problem: `Design an algorithm to serialize and deserialize a binary tree. Serialization is the process of converting a data structure into a sequence of bits so that it can be stored or transmitted and reconstructed later.
+
+You need to implement:
+- string serialize(TreeNode* root): Encodes a tree to a single string
+- TreeNode* deserialize(string data): Decodes your encoded data to tree
+
+Example: [1,2,3,null,null,4,5] → "1,2,3,null,null,4,5" → [1,2,3,null,null,4,5]`,
+                testCases: `Input: root = [1,2,3,null,null,4,5]
+Output: [1,2,3,null,null,4,5]
+
+Input: root = []
+Output: []
+
+Input: root = [1]
+Output: [1]`,
+                hint: "Use preorder traversal for serialization. For deserialization, use a queue or index to track position in the serialized string.",
+                solution: `class Codec {
+public:
+    string serialize(TreeNode* root) {
+        if (!root) return "null";
+        return to_string(root->val) + "," + 
+               serialize(root->left) + "," + 
+               serialize(root->right);
+    }
+    
+    TreeNode* deserialize(string data) {
+        queue<string> tokens;
+        stringstream ss(data);
+        string token;
+        
+        while (getline(ss, token, ',')) {
+            tokens.push(token);
+        }
+        
+        return deserializeHelper(tokens);
+    }
+    
+private:
+    TreeNode* deserializeHelper(queue<string>& tokens) {
+        if (tokens.empty()) return nullptr;
+        
+        string token = tokens.front();
+        tokens.pop();
+        
+        if (token == "null") return nullptr;
+        
+        TreeNode* node = new TreeNode(stoi(token));
+        node->left = deserializeHelper(tokens);
+        node->right = deserializeHelper(tokens);
+        
+        return node;
+    }
+};`
+            },
+            {
+                id: 5,
+                title: "Maximum Sliding Window",
+                difficulty: "hard",
+                problem: `Given an array of integers nums and a sliding window of size k, return the maximum value in each sliding window as it moves from left to right.
+
+Example:
+Input: nums = [1,3,-1,-3,5,3,6,7], k = 3
+Output: [3,3,5,5,6,7]
+
+Window positions:
+[1  3  -1] -3  5  3  6  7 → max = 3
+ 1 [3  -1  -3] 5  3  6  7 → max = 3
+ 1  3 [-1  -3  5] 3  6  7 → max = 5
+ 1  3  -1 [-3  5  3] 6  7 → max = 5
+ 1  3  -1  -3 [5  3  6] 7 → max = 6
+ 1  3  -1  -3  5 [3  6  7] → max = 7`,
+                testCases: `Input: nums = [1,3,-1,-3,5,3,6,7], k = 3
+Output: [3,3,5,5,6,7]
+
+Input: nums = [1], k = 1
+Output: [1]`,
+                hint: "Use a deque to maintain indices of elements in decreasing order. The front of deque always contains the index of maximum element.",
+                solution: `vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+    deque<int> dq; // stores indices
+    vector<int> result;
+    
+    for (int i = 0; i < nums.size(); i++) {
+        // Remove indices that are out of current window
+        while (!dq.empty() && dq.front() < i - k + 1) {
+            dq.pop_front();
+        }
+        
+        // Remove indices whose corresponding values are smaller
+        // than current element (they can't be maximum)
+        while (!dq.empty() && nums[dq.back()] < nums[i]) {
+            dq.pop_back();
+        }
+        
+        dq.push_back(i);
+        
+        // Add maximum of current window to result
+        if (i >= k - 1) {
+            result.push_back(nums[dq.front()]);
+        }
+    }
+    
+    return result;
+}`
+            },
+            {
+                id: 6,
+                title: "Alien Dictionary",
+                difficulty: "expert",
+                problem: `There is a new alien language that uses the English alphabet. The order of the alphabet is unknown to you. You are given a list of strings words from the alien language's dictionary, where the strings in words are sorted lexicographically by the rules of this new language.
+
+Return a string of the unique letters in the new alien language sorted in lexicographically increasing order by the alien language's rules. If there is no solution, return "". If there are multiple solutions, return any of them.
+
+Example:
+Input: words = ["wrt","wrf","er","ett","rftt"]
+Output: "wertf"
+
+The order is: w < e < r < t < f`,
+                testCases: `Input: words = ["wrt","wrf","er","ett","rftt"]
+Output: "wertf"
+
+Input: words = ["z","x"]
+Output: "zx"
+
+Input: words = ["z","x","z"]
+Output: "" (invalid)`,
+                hint: "This is a topological sort problem. Build a graph of character dependencies, then use DFS or BFS to find a valid ordering. Watch out for cycles!",
+                solution: `string alienOrder(vector<string>& words) {
+    unordered_map<char, unordered_set<char>> graph;
+    unordered_map<char, int> indegree;
+    
+    // Initialize graph
+    for (const string& word : words) {
+        for (char c : word) {
+            if (graph.find(c) == graph.end()) {
+                graph[c] = unordered_set<char>();
+                indegree[c] = 0;
+            }
+        }
+    }
+    
+    // Build graph by comparing adjacent words
+    for (int i = 0; i < words.size() - 1; i++) {
+        string w1 = words[i], w2 = words[i + 1];
+        
+        // Check if w1 is prefix of w2 but longer (invalid)
+        if (w1.length() > w2.length() && w1.substr(0, w2.length()) == w2) {
+            return "";
+        }
+        
+        for (int j = 0; j < min(w1.length(), w2.length()); j++) {
+            if (w1[j] != w2[j]) {
+                if (graph[w1[j]].find(w2[j]) == graph[w1[j]].end()) {
+                    graph[w1[j]].insert(w2[j]);
+                    indegree[w2[j]]++;
+                }
+                break;
+            }
+        }
+    }
+    
+    // Topological sort using BFS
+    queue<char> q;
+    for (auto& p : indegree) {
+        if (p.second == 0) {
+            q.push(p.first);
+        }
+    }
+    
+    string result;
+    while (!q.empty()) {
+        char c = q.front();
+        q.pop();
+        result += c;
+        
+        for (char neighbor : graph[c]) {
+            indegree[neighbor]--;
+            if (indegree[neighbor] == 0) {
+                q.push(neighbor);
+            }
+        }
+    }
+    
+    return result.length() == graph.size() ? result : "";
+}`
+            }
+        ];
+
+        let currentChallenge = 0;
+        let solvedCount = 0;
+        let hintsUsed = 0;
+
+        function showNextChallenge() {
+            if (currentChallenge >= challenges.length) {
+                document.querySelector('.next-challenge').innerHTML = 
+                    '<h2 style="color: #2ecc71;">🎉 Congratulations! You\'ve completed all challenges!</h2>';
+                return;
+            }
+
+            const challenge = challenges[currentChallenge];
+            const challengeHtml = `
+                <div class="challenge-card" id="challenge-${challenge.id}">
+                    <div class="challenge-header">
+                        <h2 class="challenge-title">${challenge.id}. ${challenge.title}</h2>
+                        <span class="difficulty ${challenge.difficulty}">${challenge.difficulty.toUpperCase()}</span>
+                    </div>
+                    
+                    <div class="problem-statement">
+                        ${challenge.problem.replace(/\n/g, '<br>')}
+                    </div>
+                    
+                    <div class="test-cases">
+                        <strong>Test Cases:</strong>
+                        <div class="code-block">${challenge.testCases}</div>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button class="btn btn-primary" onclick="showHint(${challenge.id})">💡 Show Hint</button>
+                        <button class="btn btn-secondary" onclick="showSolution(${challenge.id})">🔍 Show Solution</button>
+                        <button class="btn btn-success" onclick="markSolved(${challenge.id})">✅ Mark as Solved</button>
+                    </div>
+                    
+                    <div id="hint-${challenge.id}" class="hint hidden">
+                        <strong>💡 Hint:</strong><br>
+                        ${challenge.hint}
+                    </div>
+                    
+                    <div id="solution-${challenge.id}" class="solution hidden">
+                        <strong>🔍 Solution:</strong>
+                        <div class="code-block">${challenge.solution}</div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('challenges-container').insertAdjacentHTML('beforeend', challengeHtml);
+            currentChallenge++;
+            
+            // Update button text
+            const nextBtn = document.querySelector('.next-challenge button');
+            if (currentChallenge < challenges.length) {
+                nextBtn.textContent = `Next Challenge (${currentChallenge + 1}/${challenges.length})`;
+            } else {
+                nextBtn.textContent = 'All Challenges Loaded!';
+                nextBtn.disabled = true;
+                nextBtn.style.opacity = '0.5';
+            }
+        }
+
+        function showHint(challengeId) {
+            const hintEl = document.getElementById(`hint-${challengeId}`);
+            hintEl.classList.remove('hidden');
+            hintsUsed++;
+            document.getElementById('hints-used').textContent = hintsUsed;
+        }
+
+        function showSolution(challengeId) {
+            const solutionEl = document.getElementById(`solution-${challengeId}`);
+            solutionEl.classList.remove('hidden');
+        }
+
+        function markSolved(challengeId) {
+            const challengeCard = document.getElementById(`challenge-${challengeId}`);
+            challengeCard.style.borderLeft = '5px solid #2ecc71';
+            challengeCard.style.background = '#f8fff8';
+            
+            const button = challengeCard.querySelector('.btn-success');
+            button.textContent = '✅ Solved!';
+            button.disabled = true;
+            button.style.opacity = '0.7';
+            
+            solvedCount++;
+            document.getElementById('solved-count').textContent = solvedCount;
+            
+            // Update progress bar
+            const progress = (solvedCount / challenges.length) * 100;
+            document.getElementById('progress').style.width = progress + '%';
+        }
+    </script>
+</body>
+</html>
